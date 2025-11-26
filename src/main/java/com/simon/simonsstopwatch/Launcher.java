@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class Launcher extends Application {
@@ -22,13 +23,13 @@ public class Launcher extends Application {
 
         AtomicBoolean isRunning = new AtomicBoolean(false);
 
-        AtomicInteger startTime = new AtomicInteger();
+        AtomicLong startTime = new AtomicLong();
 
         BorderPane root = new BorderPane();
         root.setStyle( "-fx-background-color: red" );
 
-        Label stopwatchLabel = new Label("00:00:05");
-        stopwatchLabel.setStyle("-fx-font-size: 32;" );
+        Label stopwatchLabel = new Label("00:00:00");
+        stopwatchLabel.setStyle("-fx-font-size: 48;" );
         root.setCenter( stopwatchLabel );
 
         HBox buttons = new HBox();
@@ -42,25 +43,19 @@ public class Launcher extends Application {
         root.setBottom( buttons );
 
         startButton.setOnAction( e -> {
-            isRunning.set(true);
-            startTime.set( (int) ( new Date().getTime() / 1000 ) ) ;
+            isRunning.set( true );
+            startTime.set( new Date().getTime() );
+
             Thread thread = new Thread( () -> {
                 while(true) {
                     try {
 
                         Thread.sleep( 100 );
-                        int secondsRunning = (int) ( new Date().getTime() / 1000 - startTime.get() );
 
-                        int hours = secondsRunning / 3600;
-                        secondsRunning %= 3600;
-
-                        int minutes = secondsRunning / 60;
-                        secondsRunning %= 60;
-
-                        int seconds = secondsRunning;
-
-                        String displayedTime = hours + ":" + minutes + ":" + seconds;
+                        int millisecondsRunnning   = (int) ( new Date().getTime()  - startTime.get() );
+                        final String displayedTime = getDisplayedTime( millisecondsRunnning );
                         Platform.runLater( () -> stopwatchLabel.setText( displayedTime ) );
+
                         if(!isRunning.get())
                             break;
 
@@ -78,5 +73,26 @@ public class Launcher extends Application {
 
         stage.setScene( scene );
         stage.show();
+    }
+
+    private static String getDisplayedTime( int millisecondsRunnning ) {
+        int tenthsOfASecond = millisecondsRunnning / 100 % 10;
+
+        int secondsRunning = millisecondsRunnning / 1000;
+        int hours = secondsRunning / 3600;
+        secondsRunning %= 3600;
+
+        int minutes = secondsRunning / 60;
+        secondsRunning %= 60;
+
+        int seconds = secondsRunning;
+
+        String hourString   = hours + "";
+        String minuteString = minutes >= 10 ? minutes + "" : "0" + minutes;
+        String secondString = seconds >= 10 ? seconds + "" : "0" + seconds;
+
+        return hourString + ":" + minuteString + ":" + secondString + ":" + tenthsOfASecond;
+
+
     }
 }
