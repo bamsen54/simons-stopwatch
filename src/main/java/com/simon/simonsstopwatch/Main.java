@@ -36,7 +36,7 @@ public class Main extends Application {
         HBox buttons = new HBox();
         buttons.setAlignment( Pos.CENTER );
         Button startButton = new Button( "Start" );
-        Button stopButton  = new Button( "Stop" );
+        Button stopButton  = new Button( "Stopp" );
 
         startButton.setStyle( "-fx-font-size: 24;" );
         stopButton.setStyle(  "-fx-font-size: 24;" );
