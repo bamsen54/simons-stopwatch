@@ -1,5 +1,5 @@
 
-// Simon Toivola SY25 Objektorienterad Programmering Uppgift 1 - tidtagarur
+// Simon Toivola SY25 Objektorienterad Programmering fördjupning Uppgift 1 - tidtagarur
 
 package com.simon.simonsstopwatch;
 
